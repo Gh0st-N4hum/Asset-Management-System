@@ -1,4 +1,13 @@
 services:
+  tools:
+    image: assetsys-web
+    env_file: .env
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
   db:
     image: postgres:16
     env_file: .env
