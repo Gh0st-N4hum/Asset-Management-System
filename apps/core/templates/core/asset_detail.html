@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<p><a href="{% url 'asset_list' %}">Back to list</a></p>
+<h1>{{ object.asset_tag }} {{ object.name }}</h1>
+
+<table>
+  <tr><th>Category</th><td>{{ object.category }}</td></tr>
+  <tr><th>Department</th><td>{{ object.department }}</td></tr>
+  <tr><th>Location</th><td>{{ object.location }}</td></tr>
+  <tr><th>Supplier</th><td>{{ object.supplier|default:"None" }}</td></tr>
+  <tr><th>Serial number</th><td>{{ object.serial_number|default:"None" }}</td></tr>
+  <tr><th>Purchase date</th><td>{{ object.purchase_date|default:"Unknown" }}</td></tr>
+  <tr><th>Purchase cost</th><td>{{ object.purchase_cost|default:"Unknown" }}</td></tr>
+  <tr><th>Status</th><td>{{ object.get_status_display }}</td></tr>
+  <tr><th>Notes</th><td>{{ object.notes|linebreaksbr }}</td></tr>
+</table>
+
+<h2>Change history</h2>
+<table>
+  <thead><tr><th>When</th><th>Who</th><th>What</th></tr></thead>
+  <tbody>
+  {% for e in entries %}
+    <tr>
+      <td>{{ e.record.history_date|date:"Y-m-d H:i" }}</td>
+      <td>{{ e.record.history_user|default:"System" }}</td>
+      <td>
+        {% if e.record.history_type == "+" %}Created
+        {% else %}
+          {% for c in e.changes %}{{ c.field }}: {{ c.old }} to {{ c.new }}<br>{% endfor %}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
