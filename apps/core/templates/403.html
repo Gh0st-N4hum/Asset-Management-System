@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Access denied</h1>
+<p>Your role does not allow this action.</p>
+<p><a href="{% url 'asset_list' %}">Back to assets</a></p>
+{% endblock %}

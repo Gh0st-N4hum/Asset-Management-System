@@ -2,6 +2,7 @@
 {% block content %}
 <p><a href="{% url 'asset_list' %}">Back to list</a></p>
 <h1>{{ object.asset_tag }} {{ object.name }}</h1>
+{% if perms.core.change_asset %}<p><a href="{% url "asset_update" object.pk %}">Edit</a></p>{% endif %}
 
 <table>
   <tr><th>Category</th><td>{{ object.category }}</td></tr>

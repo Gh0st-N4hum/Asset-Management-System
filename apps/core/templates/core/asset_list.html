@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Assets</h1>
+{% if perms.core.add_asset %}<p><a href="{% url "asset_create" %}">New asset</a></p>{% endif %}
 
 <form method="get" class="filters">
   <input name="q" value="{{ params.q }}" placeholder="Tag, name or serial">

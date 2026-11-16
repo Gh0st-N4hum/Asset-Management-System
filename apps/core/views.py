@@ -1,15 +1,14 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.views.generic import DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from .forms import AssetForm
 from .models import Asset, Category, Department
 
 
-class AssetListView(LoginRequiredMixin, ListView):
+class AssetListView(PermissionRequiredMixin, ListView):
+    permission_required = "core.view_asset"
     model = Asset
     paginate_by = 25
 
@@ -47,7 +46,8 @@ class AssetListView(LoginRequiredMixin, ListView):
         return ctx
 
 
-class AssetDetailView(LoginRequiredMixin, DetailView):
+class AssetDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = "core.view_asset"
     queryset = Asset.objects.select_related("category", "department", "location", "supplier")
 
     def get_context_data(self, **kwargs):
@@ -62,3 +62,15 @@ class AssetDetailView(LoginRequiredMixin, DetailView):
             entries.append({"record": rec, "changes": changes})
         ctx["entries"] = entries
         return ctx
+class AssetCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = "core.add_asset"
+    model = Asset
+    form_class = AssetForm
+    success_message = "Asset %(asset_tag)s created."
+
+
+class AssetUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = "core.change_asset"
+    model = Asset
+    form_class = AssetForm
+    success_message = "Asset %(asset_tag)s updated."

@@ -108,6 +108,8 @@ class Asset(models.Model):
     def __str__(self):
         return f"{self.asset_tag} {self.name}"
 
+    def get_absolute_url(self):
+        return reverse("asset_detail", args=[self.pk])
     def clean(self):
         if self.purchase_date and self.purchase_date > timezone.localdate():
             raise ValidationError({"purchase_date": "Purchase date cannot be in the future."})
