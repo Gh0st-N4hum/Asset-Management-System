@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-
+from simple_history.admin import SimpleHistoryAdmin
+from .models import Asset
 from .models import Category, Department, Location, Supplier
 
 
@@ -27,3 +28,10 @@ class CategoryAdmin(admin.ModelAdmin):
 class SupplierAdmin(admin.ModelAdmin):
     list_display = ("name", "contact")
     search_fields = ("name",)
+
+@admin.register(Asset)
+class AssetAdmin(SimpleHistoryAdmin):
+    list_display = ("asset_tag", "name", "category", "department", "location", "status")
+    list_filter = ("status", "category", "department")
+    search_fields = ("asset_tag", "name", "serial_number")
+    list_select_related = ("category", "department", "location")
