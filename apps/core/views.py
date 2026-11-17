@@ -13,20 +13,21 @@ class AssetListView(PermissionRequiredMixin, ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        qs = Asset.objects.select_related("category", "department", "location")
+        qs = Asset.objects.select_related("category", "department", "location", "custodian")
         get = self.request.GET
 
         q = get.get("q", "").strip()
         if q:
             qs = qs.filter(
                 Q(asset_tag__icontains=q) | Q(name__icontains=q) | Q(serial_number__icontains=q)
+                | Q(custodian__full_name__icontains=q)
             )
 
         status = get.get("status")
         if status in Asset.Status.values:
             qs = qs.filter(status=status)
 
-        for field in ("department", "category"):
+        for field in ("department", "category", "custodian"):
             value = get.get(field)
             if value and value.isdigit():
                 qs = qs.filter(**{f"{field}_id": value})
@@ -48,7 +49,7 @@ class AssetListView(PermissionRequiredMixin, ListView):
 
 class AssetDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "core.view_asset"
-    queryset = Asset.objects.select_related("category", "department", "location", "supplier")
+    queryset = Asset.objects.select_related("category", "department", "location", "supplier", "custodian")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

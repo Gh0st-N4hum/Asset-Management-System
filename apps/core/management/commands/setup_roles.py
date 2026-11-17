@@ -2,13 +2,15 @@ from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand, CommandError
 
 LOOKUPS = ["department", "location", "category", "supplier"]
-VIEW_ALL = ["view_asset", "view_historicalasset"] + [f"view_{m}" for m in LOOKUPS]
+VIEW_ALL = ["view_asset", "view_historicalasset", "view_custodian"] + [
+    f"view_{m}" for m in LOOKUPS
+]
 
 ROLES = {
     "IT Audit": VIEW_ALL,
     "User": VIEW_ALL + ["add_asset", "change_asset"],
     "Administrator": VIEW_ALL
-    + ["add_asset", "change_asset"]
+    + ["add_asset", "change_asset", "add_custodian", "change_custodian"]
     + [f"{a}_{m}" for m in LOOKUPS for a in ("add", "change", "delete")],
 }
 

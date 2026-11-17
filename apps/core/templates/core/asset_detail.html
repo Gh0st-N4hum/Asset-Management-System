@@ -8,6 +8,7 @@
   <tr><th>Category</th><td>{{ object.category }}</td></tr>
   <tr><th>Department</th><td>{{ object.department }}</td></tr>
   <tr><th>Location</th><td>{{ object.location }}</td></tr>
+  <tr><th>Assigned to</th><td>{% if object.custodian %}<a href="{% url 'asset_list' %}?custodian={{ object.custodian_id }}">{{ object.custodian }}</a>{% if not object.custodian.is_active %} (inactive){% endif %}{% else %}Unassigned{% endif %}</td></tr>
   <tr><th>Supplier</th><td>{{ object.supplier|default:"None" }}</td></tr>
   <tr><th>Serial number</th><td>{{ object.serial_number|default:"None" }}</td></tr>
   <tr><th>Purchase date</th><td>{{ object.purchase_date|default:"Unknown" }}</td></tr>

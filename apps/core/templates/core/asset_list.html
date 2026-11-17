@@ -29,7 +29,7 @@
 
 <table>
   <thead>
-    <tr><th>Tag</th><th>Name</th><th>Category</th><th>Department</th><th>Location</th><th>Status</th></tr>
+    <tr><th>Tag</th><th>Name</th><th>Category</th><th>Department</th><th>Location</th><th>Assigned to</th><th>Status</th></tr>
   </thead>
   <tbody>
   {% for a in object_list %}
@@ -38,11 +38,11 @@
       <td>{{ a.name }}</td>
       <td>{{ a.category }}</td>
       <td>{{ a.department }}</td>
-      <td>{{ a.location }}</td>
+      <td>{{ a.location }}</td><td>{{ a.custodian|default:"" }}</td>
       <td>{{ a.get_status_display }}</td>
     </tr>
   {% empty %}
-    <tr><td colspan="6">No assets match.</td></tr>
+    <tr><td colspan="7">No assets match.</td></tr>
   {% endfor %}
   </tbody>
 </table>

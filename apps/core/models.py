@@ -83,6 +83,10 @@ class Asset(models.Model):
         Supplier, null=True, blank=True, on_delete=models.PROTECT, related_name="assets"
     )
     serial_number = models.CharField(max_length=100, blank=True)
+    custodian = models.ForeignKey(
+        "Custodian", null=True, blank=True, on_delete=models.PROTECT,
+        related_name="assets", verbose_name="Assigned to",
+    )
     purchase_date = models.DateField(null=True, blank=True)
     purchase_cost = models.DecimalField(
         max_digits=12, decimal_places=2, null=True, blank=True,
@@ -113,3 +117,23 @@ class Asset(models.Model):
     def clean(self):
         if self.purchase_date and self.purchase_date > timezone.localdate():
             raise ValidationError({"purchase_date": "Purchase date cannot be in the future."})
+
+
+class Custodian(models.Model):
+    full_name = models.CharField(max_length=150)
+    employee_number = models.CharField(max_length=30, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name="custodians")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["full_name"]
+        constraints = [
+            UniqueConstraint(
+                fields=["employee_number"],
+                condition=~Q(employee_number=""),
+                name="unique_employee_number_when_set",
+            )
+        ]
+
+    def __str__(self):
+        return self.full_name

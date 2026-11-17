@@ -1,0 +1,2 @@
+asset_tag,name,category,department,location,custodian,supplier,serial_number,purchase_date,purchase_cost,status,notes
+AST-00100,Example computer,Computer 1,IT DEPARTMENT,ISCMMGH,1001,,SN-EXAMPLE-1,2024-03-15,45000.00,In use,Sample row
